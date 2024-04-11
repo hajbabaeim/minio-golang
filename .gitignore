@@ -1,0 +1,8 @@
+/bazel-*
+.idea/
+.vscode/
+/.env
+/.dev.env
+/logs
+/node_modules
+/bin%

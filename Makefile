@@ -4,11 +4,23 @@ export
 create-mc:
 	mc alias set $(ALIAS) $(ENDPOINT) $(ACCESS_KEY) $(SECRET_KEY)
 
-add-policy:
-	mc admin policy add $(ALIAS) $(POLICY_NAME) ./readwrite-perm.json
-
 create-user:
-	mc admin user add $(ALIAS) $(USERNAME) $(ACCESS_KEY) $(SECRET_KEY)
+	mc admin user add $(ALIAS) $(USERNAME) $(SECRET_KEY)
+
+create-policy:
+	mc admin policy create $(ALIAS) $(POLICY_NAME) $(POLICY_FILE_PATH)
 
 assign-policy:
-	mc admin policy set $(ALIAS) $(POLICY_NAME) user=$(USERNAME)
+	mc admin policy attach $(ALIAS) $(POLICY_NAME) --user=$(USERNAME)
+
+user-info:
+	mc admin user info $(ALIAS) $(USERNAME)
+
+create-bucket:
+	mc mb $(ALIAS)/$(BUCKET_NAME)
+
+buckets-list:
+	mc ls $(ALIAS)
+
+bucket-objects:
+	mc ls --recursive --versions $(ALIAS)/$(BUCKET_NAME)

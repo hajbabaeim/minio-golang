@@ -35,14 +35,14 @@ You can manage your MinIO server using the provided Makefile commands:
   make create-mc ENDPOINT=<your-minio-endpoint> ACCESS_KEY=<your-access-key> SECRET_KEY=<your-secret-key>
   ```
 
-- **Add Policy**: Adds a predefined policy from `readwrite-perm.json`.
-  ```make
-  make add-policy ALIAS=<your-alias> POLICY_NAME=<your-policy-name>
-  ```
-
 - **Create User**: Creates a new user with specified access and secret keys.
   ```make
-  make create-user ALIAS=<your-alias> USERNAME=<your-username> ACCESS_KEY=<your-access-key> SECRET_KEY=<your-secret-key>
+  make create-user ALIAS=<your-alias> USERNAME=<your-username> SECRET_KEY=<your-secret-key>
+  ```
+
+- **Add Policy**: Adds a predefined policy from a json policy-file.
+  ```make
+  make add-policy ALIAS=<your-alias> POLICY_NAME=<your-policy-name> POLICY_FILE_PATH=<your-policy-file-path>
   ```
 
 - **Assign Policy**: Assigns the specified policy to a user.
@@ -50,16 +50,36 @@ You can manage your MinIO server using the provided Makefile commands:
   make assign-policy ALIAS=<your-alias> POLICY_NAME=<your-policy-name> USERNAME=<your-username>
   ```
 
+- **Get User Information**: Retrieves information about a specific user.
+  ```make
+  make user-info ALIAS=<your-alias> USERNAME=<your-username>
+  ```
+
+- **Create Bucket**: Creates a new bucket in MinIO.
+  ```make
+  make create-bucket ALIAS=<your-alias> BUCKET_NAME=<bucket-name>
+  ```
+
+- **List Buckets**: Lists all buckets on the MinIO server.
+  ```make
+  make buckets-list ALIAS=<your-alias>
+  ```
+
+- **List Bucket Objects**: Lists all objects in a specified bucket, including versions.
+  ```make
+  make bucket-objects ALIAS=<your-alias> BUCKET_NAME=<bucket-name>
+  ```
+
 Each of these commands can be customized with your MinIO instance details.
 
 ## Examples
 
-In the `examples` directory, you will find Go programs that demonstrate:
+In the `test_app` directory, you will find Go programs that demonstrate:
 
-- Connecting to MinIO
-- Uploading files
-- Downloading files
-- Listing buckets
+- [x] Connecting to MinIO
+- [x] Uploading a file
+- [ ] Downloading a file
+- [ ] Listing buckets
 
 Each example is self-contained and includes comments explaining the code.
 
@@ -68,10 +88,8 @@ Each example is self-contained and includes comments explaining the code.
 To run any example, use:
 
 ```bash
-go run examples/upload.go
+go run test_app/main.go
 ```
-
-Replace `upload.go` with the filename of the example you want to execute.
 
 ## Contributing
 

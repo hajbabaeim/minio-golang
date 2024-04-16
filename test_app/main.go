@@ -33,13 +33,13 @@ func main() {
 	ctx := context.Background()
 	endpoint := "localhost:9000"
 	accessKeyID := "minioadmin"
-	secretAccessKey := "minioadmin"
+	secretAccessKey := "minioadminpass"
 	useSSL := false
 	var customTransport *http.Transport
 
 	if mode == "secure" {
 		useSSL = true
-		caCert, err := os.ReadFile("/home/mo/Downloads/public.crt")
+		caCert, err := os.ReadFile(certFile)
 		if err != nil {
 			log.Fatalf("Failed to load CA certificate: %v", err)
 		}

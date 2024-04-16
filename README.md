@@ -87,11 +87,25 @@ Each example is self-contained and includes comments explaining the code.
 
 ## Usage
 
-To run any example, use:
+#### To run example through http, use:
 
 ```bash
-go run test_app/main.go --mode="<secure, http>" --certFile="<path to your public.cert file>"
+go run test_app/main.go --mode="http" --certFile="<path to your public.cert file>"
 ```
+
+#### To run example through TLS, use:
+
+```bash
+openssl genrsa -out private.key 2048
+openssl req -new -x509 -key private.key -sha256 -days 3650 -out public.crt -subj "/CN=minio" -extensions v3_req -config <(printf "[req]\ndistinguished_name=req\n[req]\nreq_extensions=v3_req\n[v3_req]\nbasicConstraints=CA:TRUE\nkeyUsage=nonRepudiation, digitalSignature, keyEncipherment\nsubjectAltName=DNS:minio, IP:<SERVER_IP_ADDRESS>")
+```
+
+Copy both **private.key** & **public.crt** to **/root/.minio/cert**
+
+```bash
+go run test_app/main.go --mode="secure" --certFile="<path to your public.cert file>"
+```
+
 
 ## Contributing
 

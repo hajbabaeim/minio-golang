@@ -2,13 +2,32 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
+	"github.com/spf13/cobra"
 )
+
+var (
+	certFile string
+	mode     string
+
+	rootCmd = &cobra.Command{
+		Use:   "parse",
+		Short: "Start yaml parser",
+	}
+)
+
+func init() {
+	rootCmd.PersistentFlags().StringVar(&certFile, "certificate", "public.cert", "Certificate to establish a secure connection.")
+	rootCmd.PersistentFlags().StringVar(&mode, "mode", "secure", "The mode of application to run, secure or http")
+}
 
 func main() {
 	ctx := context.Background()
@@ -16,12 +35,32 @@ func main() {
 	accessKeyID := "minioadmin"
 	secretAccessKey := "minioadmin"
 	useSSL := false
+	var customTransport *http.Transport
 
-	customTransport := &http.Transport{
-		TLSClientConfig:    nil,
-		MaxIdleConns:       100,
-		IdleConnTimeout:    90 * time.Second,
-		DisableCompression: true,
+	if mode == "secure" {
+		useSSL = true
+		caCert, err := os.ReadFile("/home/mo/Downloads/public.crt")
+		if err != nil {
+			log.Fatalf("Failed to load CA certificate: %v", err)
+		}
+
+		caCertPool := x509.NewCertPool()
+		caCertPool.AppendCertsFromPEM(caCert)
+
+		tlsConfig := &tls.Config{
+			RootCAs: caCertPool,
+		}
+
+		customTransport = &http.Transport{
+			TLSClientConfig: tlsConfig,
+		}
+	} else {
+		customTransport = &http.Transport{
+			TLSClientConfig:    nil,
+			MaxIdleConns:       100,
+			IdleConnTimeout:    90 * time.Second,
+			DisableCompression: true,
+		}
 	}
 
 	minioClient, err := minio.New(endpoint, &minio.Options{

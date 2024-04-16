@@ -9,6 +9,7 @@ Clone the repository to get started with MinIO and Go:
 ```bash
 git clone https://github.com/hajbabaeim/minio-golang.git
 cd minio-golang
+```
 
 ## Prerequisites
 
@@ -76,7 +77,8 @@ Each of these commands can be customized with your MinIO instance details.
 
 In the `test_app` directory, you will find Go programs that demonstrate:
 
-- [x] Connecting to MinIO
+- [x] Connecting to MinIO with HTTP
+- [x] Connecting to MinIo with TLS
 - [x] Uploading a file
 - [ ] Downloading a file
 - [ ] Listing buckets
@@ -88,7 +90,7 @@ Each example is self-contained and includes comments explaining the code.
 To run any example, use:
 
 ```bash
-go run test_app/main.go
+go run test_app/main.go --mode="<secure, http>" --certFile="<path to your public.cert file>"
 ```
 
 ## Contributing
